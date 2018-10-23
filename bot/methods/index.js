@@ -27,6 +27,10 @@ class Methods {
       this.clear(message);
     });
   }
+
+  register(message, moment) {
+    let participants = {};
+  }
 }
 
 module.exports = new Methods();
