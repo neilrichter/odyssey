@@ -1,12 +1,18 @@
 const
   fs = require('fs'),
   _ = require('lodash'),
+  comments = require('parse-comments'),
+  recurRead = require('recursive-readdir-sync'),
   services = {};
 
-let folders = fs.readdirSync('./services');
-_.remove(folders, item => _.includes(['index.js'], item));
-_.forEach(folders, folder => {
-  services[`$${folder}`] = require(`./${folder}`);
+
+let files = recurRead('./services');
+_.remove(files, file => file === 'services/index.js');
+
+files.forEach(file => {
+  const data = fs.readFileSync(file, 'utf-8');
+  const name = comments(data)[0].service;
+  services[`$${name}`] = require(`${process.cwd()}/${file}`);
 });
 
 module.exports = services;
