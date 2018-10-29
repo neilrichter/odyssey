@@ -1,3 +1,7 @@
+/**
+ * @service server
+ */
+
 const
   chalk = require('chalk'), 
   { exec } = require('child_process'),

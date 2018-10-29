@@ -1,7 +1,7 @@
 const
-  cron = require('node-cron'),
-  Discord = require('discord.js'),
-  client = new Discord.Client();
+  cron = require('node-cron');
+  // Discord = require('discord.js'),
+  // client = new Discord.Client();
 
 class Methods {
   flood(message) {

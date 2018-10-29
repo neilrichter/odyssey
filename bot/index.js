@@ -12,7 +12,10 @@ client.on('ready', () => {
 client.on('message', message => {
   if (message.content.startsWith('?')) {
     let command = message.content.split(' ')[0].slice(1).toLowerCase();
-    methods[command](message);
+    console.log(command);
+    try {
+      methods[command](message);
+    } catch(e) {}
   }
 });
 
