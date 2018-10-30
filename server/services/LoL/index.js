@@ -1,0 +1,79 @@
+/**
+ * @service LoL
+ */
+
+const
+  config = require.main.require('./config'),
+  axios = require('axios');
+
+class LoLApi {
+  /**
+   * Fetches basic information to LoL API such as profile icon, account ID and summoner ID
+   * @async
+   * @param {string} summonerName - Summoner name
+   * @returns {Promise<Object>} Summoner data
+   */
+  getSummonerByName(summonerName) {
+    return axios.get(`https://euw1.api.riotgames.com/lol/summoner/v3/summoners/by-name/${summonerName}`, {
+      params: {
+        api_key: config.LoL
+      }
+    })
+      .then(response => ({
+        code: response.status,
+        data: response.data
+      }))
+      .catch(err => ({
+        code: err.response.status,
+        message: err.response.statusText
+      }));
+  }
+
+  /**
+   * Fetches information to LoL API such as static datas versions
+   * @async
+   * @returns {Promise<Object>} Versions object
+   */
+  getStaticDataUrls() {
+    let Riot = {DDragon: {}};
+    return axios.get('https://ddragon.leagueoflegends.com/realms/euw.js')
+      .then(response => {
+        eval(response.data);
+        return Riot.DDragon.m;
+      })
+      .catch(err => console.log(err));
+  }
+
+  /**
+   * Retrieves the picture of the current summoner icon
+   * @async
+   * @param {string} summoner - Summoner name
+   * @returns {Object} iconUrl and iconId
+   */
+  async getSummonerIcon(summoner) {
+    const { data } = await this.getSummonerByName(summoner)
+    const { n } = await this.getStaticDataUrls();
+    return {
+      data: {
+        iconUrl:`http://ddragon.leagueoflegends.com/cdn/${n.profileicon}/img/profileicon/${data.profileIconId}.png`,
+        iconId: data.profileIconId
+      },
+      code: 301
+    }
+  }
+
+  checkSummonerIcon(summonerName) {
+    /**
+     * Database =>
+     *    Create users table
+     *    + id + discordid + summonerName + summonerID + step + verified(bool) + old icon + icon to put + creation + edition timestamp 
+     *    Validate Two times icon
+     *    indicate steps
+     *    Allow only default icons (1 to 28?) -> To check
+     *    
+     */
+    
+  }
+}
+
+module.exports = new LoLApi();

@@ -28,8 +28,8 @@ class Methods {
     });
   }
 
-  register(message, moment) {
-    let participants = {};
+  register(message) {
+    console.log(message)
   }
 }
 
