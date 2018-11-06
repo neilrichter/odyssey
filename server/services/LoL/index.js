@@ -21,12 +21,14 @@ class LoLApi {
     })
       .then(response => ({
         code: response.status,
-        data: response.data
+        summoner: response.data
       }))
+      // .then(response => console.log(response))
       .catch(err => ({
         code: err.response.status,
         message: err.response.statusText
       }));
+      // .catch(err => console.log(err));
   }
 
   /**
@@ -50,13 +52,13 @@ class LoLApi {
    * @param {string} summoner - Summoner name
    * @returns {Object} iconUrl and iconId
    */
-  async getSummonerIcon(summoner) {
-    const { data } = await this.getSummonerByName(summoner)
+  async getSummonerIcon(summonerName) {
+    const { summoner } = await this.getSummonerByName(summonerName)
     const { n } = await this.getStaticDataUrls();
     return {
       data: {
-        iconUrl:`http://ddragon.leagueoflegends.com/cdn/${n.profileicon}/img/profileicon/${data.profileIconId}.png`,
-        iconId: data.profileIconId
+        iconUrl:`http://ddragon.leagueoflegends.com/cdn/${n.profileicon}/img/profileicon/${summoner.profileIconId}.png`,
+        iconId: summoner.profileIconId
       },
       code: 301
     }

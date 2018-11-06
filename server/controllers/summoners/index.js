@@ -1,15 +1,12 @@
 const
   express = require('express'),
   fs = require('fs'),
-  { $LoL, $server } = require.main.require('./services'),
+  { $LoL, $server, $user } = require.main.require('./services'),
   app = express.Router();
 
-/**
- * Tournaments controller
- */
 app.get('/:summoner', (req, res, next) => {
   $LoL.getSummonerByName(req.params.summoner)
-    .then(response => res.status(response.code).send(response.data || response.message))
+    .then(response => res.status(response.code).send(response.summoner || response.message))
     .catch(err => console.log(err));
 });
 
@@ -23,6 +20,25 @@ app.get('/:summoner/icon', async (req, res, next) => {
     url = await $server.download(data.iconUrl, 'public/img/profile_icons', `${data.iconId}`, 'png');
   }
   res.sendFile(url);
+});
+
+app.post('/verify', async (req, res, next) => {
+  let data = await $user.isVerified(req.body.discordId);
+  if (!data.user) { 
+    data.user = await $user.isVerifying(req.body.discordId, req.body.summonerName);
+    try {
+      const { summoner } = await $LoL.getSummonerByName(req.body.summonerName);
+      if (summoner) {
+        data = !data.user ? await $user.startVerification(req.body.discordId, summoner) : await $user.verify(req.body.discordId, summoner);
+      } else {
+        data = { user: {}, status: 404 };
+      }
+    } catch (err) {
+      console.log(err);
+      data = { user: {}, status: 404 };
+    }
+  }
+  return res.status(data.status).send(data.user);
 });
 
 module.exports = app;
