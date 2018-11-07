@@ -63,19 +63,6 @@ class LoLApi {
       code: 301
     }
   }
-
-  checkSummonerIcon(summonerName) {
-    /**
-     * Database =>
-     *    Create users table
-     *    + id + discordid + summonerName + summonerID + step + verified(bool) + old icon + icon to put + creation + edition timestamp 
-     *    Validate Two times icon
-     *    indicate steps
-     *    Allow only default icons (1 to 28?) -> To check
-     *    
-     */
-    
-  }
 }
 
 module.exports = new LoLApi();

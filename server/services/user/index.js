@@ -12,6 +12,12 @@ const getRandomInt = (min, max) => {
 }
 
 class User {
+	/**
+	 * Checks if a user is already verified
+	 * @async
+	 * @param {number} discord_id - Discord id of the user
+	 * @returns {Promise<Object>} User and HTTP status code
+	 */
 	isVerified(discord_id) {
 		return $db
 			.select('*')
@@ -28,6 +34,13 @@ class User {
 			.catch(err => console.log(err));
 	}
 
+	/**
+	 * Whether a user already started verifying or not
+	 * @async
+	 * @param {number} discord_id - Discord id of the user to check
+	 * @param {string} summoner_name - Summoner name to verify
+	 * @returns {Promise<Object>} Found user or undefined
+	 */
 	isVerifying(discord_id, summoner_name) {
 		return $db
 			.select('*')
@@ -39,6 +52,13 @@ class User {
 			.catch(err => console.log(err));
 	}
 
+	/**
+	 * Starts verification and inserts in database basic information to allow verification
+	 * @async
+	 * @param {number} discord_id - Discord id of the user to check
+	 * @param {string} summoner - Summoner name
+	 * @returns {Promise<Object>} User and HTTP status code to send
+	 */
 	async startVerification(discord_id, summoner) {
 		const exists = await $db
 			.select('*')
@@ -80,6 +100,13 @@ class User {
 			.catch(err => console.log(err));
 	}
 
+	/**
+	 * Verifies a user and checks if he followed the instructions
+	 * @async
+	 * @param {number} discord_id - Discord id of the user to verify
+	 * @param {string} summoner - Summoner name of the user
+	 * @returns {Promise<Object>} User and HTTP status code to send
+	 */
 	verify(discord_id, summoner) {
 		return $db
 			.select('*')

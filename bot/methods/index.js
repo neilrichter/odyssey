@@ -1,5 +1,6 @@
 const
   axios = require('axios'),
+  config = require.main.require('./config'),
   Discord = require('discord.js'),
   cron = require('node-cron');
 
@@ -32,6 +33,11 @@ class Methods {
     console.log(message)
   }
 
+  /**
+   * Verifies a user according to its summoner name
+   * @example `?verify summonername`
+   * @param {Message} message - Messoge object
+   */
   async verify(message) {
     const summonerName = message.content.split(' ').slice(1).join(' ');
     let data = {};
@@ -58,22 +64,22 @@ class Methods {
     switch (status) {
       case 200:
         embed.setTitle('Validation de vérification du compte');
-        embed.setThumbnail(`https://hungry-frog-33.localtunnel.me/img/profile_icons/${user.old_icon}.png`);
+        embed.setThumbnail(`${config.localtunnel}/img/profile_icons/${user.old_icon}.png`);
         embed.setDescription(`Félicitations, ton compte **${summonerName}** a bien été validé.
         Tu peux désormais t'inscrire aux tournois de la communauté !\n Tu peux remettre ton ancien icône si tu le désires`);
         break;
 
       case 201:
         embed.setTitle('Vérification de compte League of Legends');
-        embed.setThumbnail(`https://hungry-frog-33.localtunnel.me/img/profile_icons/${user.old_icon}.png`);
+        embed.setThumbnail(`${config.localtunnel}/img/profile_icons/${user.old_icon}.png`);
         embed.setDescription(`Bonjour ${message.author.username}, tu as demandé une vérification de ton compte League of Legends **${summonerName}**`);
         embed.addField('Comment vérifier mon compte ?', `Remplace ton icône par celui juste en dessous, puis envoie\n\`?verify ${summonerName}\` ici.`);
-        embed.setImage(`https://hungry-frog-33.localtunnel.me/img/profile_icons/${user.new_icon}.png`);
+        embed.setImage(`${config.localtunnel}/img/profile_icons/${user.new_icon}.png`);
         break;
 
       case 204:
         embed.setTitle('Vérification de compte League of Legends');
-        embed.setThumbnail(`https://hungry-frog-33.localtunnel.me/img/profile_icons/${user.old_icon}.png`);
+        embed.setThumbnail(`${config.localtunnel}/img/profile_icons/${user.old_icon}.png`);
         embed.setDescription(`Bonjour ${message.author.username}, ton compte est déjà lié à un compte League of Legends.`);
         embed.addField('Que faire ?', 'Si tu as besoin de poser une question ou obtenir de l\'aide, envoie un message à <@120602141537599488>.');
         break;
@@ -82,8 +88,8 @@ class Methods {
         embed.setTitle('Echec de la vérification de compte League of Legends');
         embed.setDescription(`L'icône du compte **${summonerName}** ne correspond pas à celui que tu dois mettre pour vérifier ton compte.
         \nRemplace l'icône de ton compte par celui ci-dessous, puis envoie\n\`?verify ${summonerName}\` ici.`);
-        embed.setThumbnail(`https://hungry-frog-33.localtunnel.me/img/profile_icons/${user.old_icon}.png`);
-        embed.setImage(`https://hungry-frog-33.localtunnel.me/img/profile_icons/${user.new_icon}.png`);
+        embed.setThumbnail(`${config.localtunnel}/img/profile_icons/${user.old_icon}.png`);
+        embed.setImage(`${config.localtunnel}/img/profile_icons/${user.new_icon}.png`);
         break;
 
       case 404:
