@@ -1,4 +1,5 @@
 module.exports = {
   token: 'TOKEN_HERE',
-  localtunnel: '' // Install localtunnel globally with npm and run `lt --port 3030 -s choosesubdomain`
+  localtunnel: '', // Install localtunnel globally with npm and run `lt --port 3030 -s choosesubdomain`
+  server: 'http://localhost:3030'
 };

@@ -16,7 +16,7 @@
     "nodemon": "^1.18.4"
   },
   "scripts": {
-    "dev": "nodemon ./",
+    "dev": "nodemon --inspect=9090 ./",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

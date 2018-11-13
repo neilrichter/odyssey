@@ -1,6 +1,7 @@
 const
   axios = require('axios'),
   config = require.main.require('./config'),
+  { $user } = require.main.require('./services'),
   Discord = require('discord.js'),
   cron = require('node-cron');
 
@@ -29,6 +30,32 @@ class Methods {
     });
   }
 
+  async create(message) {
+    if (!await $user.hasRole(message.channel.guild, message.author)) return;
+
+    const sizeFlag = new RegExp(/--size=[0-9]+/);
+    let size = sizeFlag.exec(message.content);
+
+    if (size) {
+      size = size[0].split('=')[1];
+    }
+
+    let name = message.content.split('?create ')[1];
+    name =  name.replace(/\s--[a-zA-Z]+=.+/g, '');
+
+    let data = {};
+    try {
+      data = await axios.post(`${config.server}/tournaments/create`, {
+        size: parseInt(size),
+        name
+      })
+        .then(response => response.data)
+        .catch(err => console.log(err));
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
   register(message) {
     console.log(message)
   }
@@ -42,7 +69,7 @@ class Methods {
     const summonerName = message.content.split(' ').slice(1).join(' ');
     let data = {};
     try {
-      data = await axios.post('http://localhost:3030/summoners/verify', {
+      data = await axios.post(`${config.server}/summoners/verify`, {
         discordId: message.author.id,
         summonerName
       })
@@ -58,8 +85,6 @@ class Methods {
     }
     const { user, status } = data;
     const embed = new Discord.RichEmbed();
-
-    // https://hungry-frog-33.localtunnel.me => Use localtunnel to allow Discord to fetch assets
 
     switch (status) {
       case 200:
