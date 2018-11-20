@@ -25,9 +25,9 @@ app.get('/:summoner/icon', async (req, res, next) => {
 app.post('/verify', async (req, res, next) => {
   let data = await $user.isVerified(req.body.discordId);
   if (!data.user) { 
-    data.user = await $user.isVerifying(req.body.discordId, req.body.summonerName);
+    const { summoner } = await $LoL.getSummonerByName(req.body.summonerName);
+    data.user = await $user.isVerifying(req.body.discordId, summoner.name);
     try {
-      const { summoner } = await $LoL.getSummonerByName(req.body.summonerName);
       if (summoner) {
         data = !data.user ? await $user.startVerification(req.body.discordId, summoner) : await $user.verify(req.body.discordId, summoner);
       } else {

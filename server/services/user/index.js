@@ -46,7 +46,6 @@ class User {
 			.select('*')
 			.from('users')
 			.where({ discord_id, verified: false, summoner_name })
-			.andWhere('step', '>=', 1)
 			.first()
 			.then(result => result)
 			.catch(err => console.log(err));
@@ -76,7 +75,6 @@ class User {
 				discord_id,
 				summoner_name: summoner.name,
 				summoner_id: summoner.id,
-				step: 1,
 				verified: false,
 				old_icon: summoner.profileIconId,
 				new_icon: getRandomInt(0, 28)

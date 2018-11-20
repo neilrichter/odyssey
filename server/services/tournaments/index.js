@@ -10,8 +10,8 @@ class Tournaments {
 		return $db
 			.insert(data)
 			.into('tournaments')
-			.then(row => ({ code: 201 }))
-			.catch(err => ({ code: 500 }));
+			.then(row => 201)
+			.catch(err => 500);
 	}
 }
 

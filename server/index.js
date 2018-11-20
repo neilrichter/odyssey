@@ -24,5 +24,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use('/hello', require('./controllers/hello'));
 app.use('/tournaments', require('./controllers/tournaments'));
 app.use('/summoners', require('./controllers/summoners'));
+app.use('/users', require('./controllers/users'));
 
 $server.checkDatabase();
